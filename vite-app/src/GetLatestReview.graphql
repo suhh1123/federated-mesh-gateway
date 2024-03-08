@@ -1,0 +1,12 @@
+query GetLatestReivew {
+  latestReviews {
+    id
+    comment
+    rating
+    location {
+      id
+      name
+      overallRating
+    }
+  }
+}

@@ -7,13 +7,19 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-server-types": "sh ./scripts/gql-typegen.sh"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/typescript": "^4.0.4",
+    "@graphql-codegen/typescript-operations": "^4.1.2",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.0",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^7.0.2",

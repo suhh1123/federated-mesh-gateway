@@ -1,0 +1,9 @@
+sources:
+  - name: Locations
+    handler:
+      graphql:
+        endpoint: http://localhost:4001
+  - name: Reviews
+    handler:
+      graphql:
+        endpoint: http://localhost:4002

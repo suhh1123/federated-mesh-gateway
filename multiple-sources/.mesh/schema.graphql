@@ -1,0 +1,104 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+directive @external(reason: String) on FIELD_DEFINITION | OBJECT
+
+directive @requires(fields: _FieldSet!) on FIELD_DEFINITION
+
+directive @provides(fields: _FieldSet!) on FIELD_DEFINITION
+
+directive @key(fields: _FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @link(url: String!, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+directive @shareable repeatable on OBJECT | FIELD_DEFINITION
+
+directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @tag(name: String!) repeatable on FIELD_DEFINITION | INTERFACE | OBJECT | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @override(from: String!) on FIELD_DEFINITION
+
+directive @composeDirective(name: String!) repeatable on SCHEMA
+
+directive @extends on OBJECT | INTERFACE
+
+type Query {
+  """The three latest reviews submitted for FlyBy's locations"""
+  latestReviews: [Review!]!
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+  """
+  The full list of locations presented by the Interplanetary Space Tourism department
+  """
+  locations: [Location!]!
+  """The details of a specific location"""
+  location(id: ID!): Location
+}
+
+type Mutation {
+  submitReview(locationReview: LocationReviewInput): SubmitReviewResponse
+}
+
+scalar _Any
+
+scalar _FieldSet
+
+scalar link__Import
+
+enum link__Purpose {
+  SECURITY
+  EXECUTION
+}
+
+type _Service {
+  sdl: String
+}
+
+union _Entity = Location
+
+type Review {
+  id: ID!
+  """Written text"""
+  comment: String
+  """A number from 1 - 5 with 1 being lowest and 5 being highest"""
+  rating: Int
+  """The location the review is about"""
+  location: Location
+}
+
+input LocationReviewInput {
+  """Written text"""
+  comment: String!
+  """A number from 1 - 5 with 1 being lowest and 5 being highest"""
+  rating: Int!
+  """Location Id"""
+  locationId: String!
+}
+
+type SubmitReviewResponse {
+  """Similar to HTTP status code, represents the status of the mutation"""
+  code: Int!
+  """Indicates whether the mutation was successful"""
+  success: Boolean!
+  """Human-readable message for the UI"""
+  message: String!
+  """Newly created review"""
+  locationReview: Review
+}
+
+type Location @key(fields: "id") {
+  id: ID!
+  """The calculated overall rating based on all reviews"""
+  overallRating: Float
+  """All submitted reviews about this location"""
+  reviewsForLocation: [Review]!
+  """The name of the location"""
+  name: String!
+  """A short description about the location"""
+  description: String!
+  """The location's main photo as a URL"""
+  photo: String!
+}
